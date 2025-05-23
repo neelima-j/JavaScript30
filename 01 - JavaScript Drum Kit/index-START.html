@@ -59,6 +59,54 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+// TODO:  Sound overlap issue?
+// TODO: Long press makes the transition 'stick'
+/*In the case of long-press, the browser might optimize away repeated classList.add('playing') calls
+if the visual state is already playing, thus no new transition begins,
+and no transitionend for that "press" ever occurs.*/
+
+
+// Add eventslisteners for click
+// Get all elements with the class 'key'
+const keys = document.querySelectorAll('.key');
+// Iterate over each key and add event listeners to start and stop
+keys.forEach(key => {
+    key.addEventListener('click', addSound);
+    key.addEventListener('transitionend', transitionEnd);
+});
+
+// Add eventslisteners for keydown. This is anywhere on the page and not linked to a place.
+window.addEventListener('keydown', addSound);
+
+
+// function declarations
+function addSound(e) {
+    var dataKey;
+
+    if (e.type == 'click') {
+        dataKey = this.dataset.key; // 65
+    } else if (e.type == 'keydown') {
+        dataKey = e.keyCode; //65
+    }
+    var audio = document.querySelector(`audio[data-key="${dataKey}"]`);
+    var keyDiv = document.querySelector(`.key[data-key="${dataKey}"]`);
+    if (audio) {
+        audio.currentTime = 0; // Rewind to the start. If you don't do this, repeat keypresses don't make a sound. WHY?
+        audio.play();
+        keyDiv.classList.add('playing'); // change style to .playing
+
+    }
+
+}
+
+
+function transitionEnd(e) {
+
+    //Looking at the things that transitioned, we have the borders and the color changes
+    //We want to pick the transition that takes the longest (transform) and do the next steps after that
+    if(e.propertyName == 'transform'){ console.log(e);
+    this.classList.remove('playing');}
+}
 
 </script>
 
