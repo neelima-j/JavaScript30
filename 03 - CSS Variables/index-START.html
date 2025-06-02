@@ -13,16 +13,27 @@
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
     <label for="blur">Blur:</label>
-    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <input id="blurX" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
 
     <label for="base">Base Color</label>
     <input id="base" type="color" name="base" value="#ffc600">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img src="https://images.unsplash.com/photo-1743300873241-55cc4d602663?q=80&w=308&auto=format&fit=crop">
 
   <style>
 
+    :root{
+      --base: yellow;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -46,6 +57,41 @@
   </style>
 
   <script>
+/*
+// LOGIC DOES NOT USE VARIABLES
+  const imgElement = document.querySelector('img');
+  spacing.addEventListener('input',(e)=>{
+    // make the padding like "10px"
+    imgElement.style.padding = e.target.value + e.target.dataset.sizing;
+  });
+
+  base.addEventListener('input',(e)=>{
+    // assign  the hex code to the img background
+    imgElement.style.background = e.target.value;
+  });
+
+  blurX.addEventListener('input',(e)=>{
+    // make the blur like "1opx" and assign to img filter
+    let blurValue = e.target.value + e.target.dataset.sizing
+    imgElement.style.filter = 'blur(' + blurValue + ')';
+  });
+  */
+//----------------------------------------------------------------------------
+// Using CSS Custom Properties or CSS VARIABLES
+// The 3 variables are essentially properties of the element, just like height or Color
+// so you access them just like that!
+
+// add event listeners
+const inputs = document.querySelectorAll('.controls input');
+inputs.forEach(input =>  input.addEventListener('input', handleUpdate));
+
+// in the function for each input event,
+// - create the value for the variable(property), update the variable(property)
+function handleUpdate(){
+  let elementValue = this.value + (this.dataset.sizing || '');
+  console.log(this.name, elementValue);
+  document.documentElement.style.setProperty(`--${this.name}`,elementValue);
+};
   </script>
 
 </body>
