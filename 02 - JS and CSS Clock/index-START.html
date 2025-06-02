@@ -58,16 +58,63 @@
     }
 
     .hand {
-      width: 50%;
-      height: 6px;
+      width: 50%; /* how much of the div it takes up*/
+      height: 3px;
       background: black;
       position: absolute;
-      top: 50%;
+      top: 50%; /*The element's top edge should be at half the div's height*/
+      left: 0%;
+      transform-origin: 100%; /*axis of rotation is the right edge*/
+      transform: rotate(90deg); /*make the hands start all pointing up*/
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, .6, 1);
+      background: red;
     }
 
+    .min-hand {
+      width: 40%;
+      left: 10%;
+      background: white;
+      height: 6px;
+    }
+    .hour-hand {
+      width: 30%;
+      left: 20%;
+      background: white;
+      height: 6px;
+    }
   </style>
 
   <script>
+
+
+  const secondHand = document.querySelector('.second-hand');
+  const minuteHand = document.querySelector('.min-hand');
+  const hourHand = document.querySelector('.hour-hand');
+
+  function setDate(){
+
+    // get the datetime
+    const dateTime = new Date();
+    const seconds = dateTime.getSeconds();
+    const minutes = dateTime.getMinutes();
+    const hours = dateTime.getHours();
+
+    // Convert time to degrees rotation
+    const secondsDegrees = seconds*6 + 90;
+    const minutesDegrees = minutes*6 + 90;
+    const hoursDegrees = hours*30 +90;
+    console.log(secondsDegrees, minutesDegrees, hoursDegrees);
+
+    // Apply rotation
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+    hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+  }
+
+
+  /* Function runs every second*/
+  setInterval(setDate, 1000)
 
 
   </script>
