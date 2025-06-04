@@ -16,34 +16,40 @@
       font-weight: 200;
     }
 
-    body {
-      margin: 0;
-    }
-
-    *, *:before, *:after {
-      box-sizing: inherit;
-    }
-
+/*This is the parent container that holds all five panels
+Its display: flex makes it a horizontal flex container by default
+It lays out its children (the individual panels) in a row from left to right
+*/
     .panels {
       min-height: 100vh;
-      overflow: hidden;
+      overflow: hidden; 
+      display: flex;
     }
+/*
+This is the child element that represents each panel - it is a flex item and a flex container
+It has a flex: 1, which means it will take up equal space in the flex container
+It has a flex-direction: column, which means it will lay out its children (the text) in a column
+*/
 
     .panel {
       background: #6B0F9C;
       box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
-      color: white;
-      text-align: center;
-      align-items: center;
+      color: white;      
+      flex: 1; /*This is the flex property that makes the panel take up equal space in the flex container*/
+      display: flex; /*This is the flex property that makes the panel a flex container*/
+      flex-direction: column; /*This is the flex property that makes the panel lay out its children (the text) in a column*/
       /* Safari transitionend event.propertyName === flex */
-      /* Chrome + FF transitionend event.propertyName === flex-grow */
-      transition:
-        font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
-        flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
-        background 0.2s;
+      /* Chrome + FF transitionend event.propertyName === flex-grow */     
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      transition: 
+        font-size 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+        flex 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+        background 0.2s;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -56,7 +62,11 @@
     .panel > * {
       margin: 0;
       width: 100%;
-      transition: transform 0.5s;
+      
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .panel p {
@@ -64,14 +74,19 @@
       font-family: 'Amatic SC', cursive;
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
       font-size: 2em;
+      text-align: center;
+      vertical-align: middle;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .panel p:nth-child(2) {
-      font-size: 4em;
-    }
+    .panel > *:first-child { transform: translateY(-100%);}/*This is the transform property that makes the first child of the panel move up*/
+    .panel.open-active > *:first-child { transform: translateY(0);}/* makes the first child of the panel come back.*/ 
+    .panel > *:last-child  { transform: translateY(100%);}/*This is the transform property that makes the last child of the panel move down*/
+    .panel.open-active > *:last-child  { transform: translateY(0);}/*T makes the last child of the panel move back.*/
+      
 
     .panel.open {
       font-size: 40px;
+      flex: 5; /*take up 5 times the space of the other panels when open*/
     }
 
   </style>
@@ -106,7 +121,34 @@
   </div>
 
   <script>
+    const panels = document.querySelectorAll('.panel');   
+    panels.forEach(panel => {
+      panel.addEventListener('click', () => {
+        /* when tis panel is clicked, remove 'open ' class from all panels*/
+       removeOpenClass(panel);
+       panel.classList.toggle('open');
+       
+        });
+      });
+    
+    /*When the transition ends, add the open-active class to the panel*/
+    panels.forEach(panel => {
+      panel.addEventListener('transitionend', transitionEnd);
+    });
 
+    function removeOpenClass(ActivePanel) {
+      panels.forEach(panel => {
+        if(panel !== ActivePanel) {
+          panel.classList.remove('open');
+        }
+      });
+    }
+    function transitionEnd(e) {
+      
+      if(e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
   </script>
 
 
