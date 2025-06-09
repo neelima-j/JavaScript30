@@ -10,7 +10,7 @@
   <p onClick="makeGreen()">×BREAK×DOWN×</p>
 
   <script>
-    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'Shugo', age: 8 }];
 
     function makeGreen() {
       const p = document.querySelector('p');
@@ -19,28 +19,70 @@
     }
 
     // Regular
+    console.log(dogs);
 
     // Interpolated
+    console.log(`interpolated string with ${dogs[0].name}`);
 
     // Styled
+    console.log('%c Styled text','color : red');
 
     // warning!
+    console.warn(`This is a warning about your dog named: ${dogs[0].name}`);
 
     // Error :|
+    console.error(`Error: We could not find a  dog named: ${dogs[0].name}`);
 
     // Info
+    console.info(`A dog can be named ${dogs[0].name}`);
 
     // Testing
+    console.assert(1<0,"Assertion wrong");
 
     // clearing
+    console.clear();
 
     // Viewing DOM Elements
+    console.log(dogs);
+    console.dir(dogs);
+
+    const p = document.querySelector('p');
+    console.log(p);
+    console.dir(p);
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+      console.log(`${dog.name}`);
+      console.log(`- is ${dog.age} years old`);
+      console.log(`- is ${dog.age*7} years old in human years`);
+      console.groupEnd(`${dog.name}`);
+
+    })
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);
+      console.log(`${dog.name}`);
+      console.log(`- is ${dog.age} years old`);
+      console.log(`- is ${dog.age*7} years old in human years`);
+      console.groupEnd(`${dog.name}`);
+
+    })
 
     // counting
+      dogs.forEach(dog => {
+      console.log(`Counting\n${dog.name}`);
+      console.count(`${dog.name.charAt(0)}`); //Expected output 2 because count() is called twice with label 'S' 
+    });
+    
 
     // timing
+  //   console.time('fetch');
+  //   fetch('https://us-central1-mozportal-2f17f.cloudfunctions.net/getOC4IDSData')
+  //   .then(data => data.json())
+  //   .then(data => {
+  //     console.timeEnd('fetch');
+  //     console.log(data);
+  //   });
 
   </script>
 </body>
