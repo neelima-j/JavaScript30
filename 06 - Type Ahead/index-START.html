@@ -17,7 +17,83 @@
   </form>
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+const cities = []; /*Keeping this a const is important*/
 
+/*---------------PROMISE
+The Promise object represents the eventual completion (or failure)
+of an asynchronous operation and its resulting value.
+The fetch() returns a promise.
+-----THEN CATCH FINALLY---------
+used to associate further action with a promise that becomes settled.
+The catch() and finally() methods call then() internally and make error handling less verbose.
+these methods return promises
+*/
+
+fetch(endpoint)
+  .then(response => response.json()) /*.json() returns a promise*/
+  .then(data => cities.push(...data)) ; /*spread takes the array, opens it up and thus push works as we want, ELSE it would have made an array with one element, an array*/
+
+function findMatches(wordToMatch) {
+  const regex = new RegExp(wordToMatch, 'gi');
+  return cities
+  .filter(place => {
+    // Check if the city or state matches the search query
+    return place.city.match(regex) || place.state.match(regex);
+  })
+  .map(place => {
+    // Create highlighted versions of matching text while preserving case
+    const highlightedCity = place.city.split(regex)
+    .map((part, i, arr) => {
+      // If this isn't the last part, there was a match after it
+      if (i < arr.length - 1) {
+        const match = place.city.match(regex)[i];
+        return part + `<span class="hl">${match}</span>`;
+      }
+      return part;
+    })
+    .join('');//map returns an array. this join turns into one string.
+
+
+
+    const highlightedState = place.state.split(regex)
+    .map((part, i, arr) => {
+      if (i < arr.length - 1) {
+        const match = place.state.match(regex)[i];
+        return part + `<span class="hl">${match}</span>`;
+      }
+      return part;
+    })
+    .join('');
+
+    return {
+      city: highlightedCity,
+      state: highlightedState,
+      population: place.population
+    };
+  });
+}
+// display matches takes the array of matches and displays them in suggestions
+function displayMatches() {
+  const matchArray = findMatches(this.value); // this.value has the input string
+  const html = matchArray.map(place => `
+    <li>
+      <span class="name">${place.city}, ${place.state}</span>
+      <span class="population">${numberWithCommas(place.population)}</span>
+    </li>
+  `).join(''); //map returns an array. this join turns into one string.
+  suggestions.innerHTML = html;
+}
+
+// format numbers to have commas.
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+//searchInput.addEventListener('change', displayMatches); //will only fire when focus moves away from input
+searchInput.addEventListener('keyup', displayMatches); //
 </script>
 </body>
 </html>
