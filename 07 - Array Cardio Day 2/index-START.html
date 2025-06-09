@@ -26,16 +26,56 @@
     ];
 
     // Some and Every Checks
-    // Array.prototype.some() // is at least one person 19 or older?
+
+    // Array.prototype.some()
+    /*tests whether at least one element in the array passes the test implemented by the provided function.
+    It returns true if, in the array, it finds an element for which the provided function returns true;
+    otherwise it returns false.
+    It doesn't modify the array.*/
+
+    // is at least one person 19 or older?
+    const ageCheck = people.some(olderThanNineteen);
+    function olderThanNineteen(person){
+      return (((new Date()).getFullYear() - person.year) >= 19);
+    }
+    console.log({ageCheck})
+
+
     // Array.prototype.every() // is everyone 19 or older?
+const ageCheckEvery = people.every(olderThanNineteen);
+console.log({ageCheckEvery});
+
 
     // Array.prototype.find()
-    // Find is like filter, but instead returns just the one you are looking for
+    /* returns the first element in the provided array that satisfies the provided testing function.
+    If no values satisfy the testing function, undefined is returned.*/
     // find the comment with the ID of 823423
+
+    const findComment = comments.find(idCheck);
+    function idCheck(comment){
+      return (comment.id == 823423);
+    }
+    console.log(findComment);
 
     // Array.prototype.findIndex()
     // Find the comment with this ID
     // delete the comment with the ID of 823423
+    const index = comments.findIndex(idCheck);
+    console.log(index);
+
+    // Array.prototype.splice()
+    // removing or replacing existing elements and/or adding new elements in place.
+    // comments.splice(index,1); //(start, deleteCount)
+    // note that SLICE accesses part of an array without modifying it
+
+
+    // Build a new array
+    const newComments = [
+      ...comments.slice(0,index),
+      ...comments.slice(index+1)
+    ];
+    console.table(newComments);
+    console.table(comments);
 
   </script>
 </body>
