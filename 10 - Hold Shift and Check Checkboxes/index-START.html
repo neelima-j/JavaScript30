@@ -97,6 +97,38 @@
   </div>
 
 <script>
+
+
+  // When a checkbox is clicked, see if shift key is pressed 
+  // If true, loop up through the checkboxes from the last checked one to the current one. 
+  // and make then Checked . Ensure that this works if the lastchecked is above or below this one
+  // update Last checked to this one
+
+  // CASE: there is no lastchecked and user holds down shift key
+  // CASE: lastchecked is below this 
+  let lastChecked;
+
+  // Add event listeners to all the checkboxes
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {checkbox.addEventListener('click', handleClick) });
+
+ function handleClick(e) {
+  let flagInside = false;
+  if (this.checked && e.shiftKey){
+    checkboxes.forEach(checkbox => {
+      console.log("looping");
+     
+      if (checkbox == lastChecked || checkbox == this) flagInside = !flagInside;
+      
+      if (flagInside){checkbox.checked = true; }
+    });
+
+  }
+  lastChecked = this;
+ }
+
+
+
 </script>
 </body>
 </html>
