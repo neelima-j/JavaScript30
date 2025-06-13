@@ -7,6 +7,42 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <div id = 'question'><p>Type the secret code</p></div>
+    <div id = 'code'> </div>
+    <style>
+      .question {}
+    </style>
+    <script>
+      // console log the current key pressed
+      // create an array that stores every key press and log it
+      let keyArray = [];
+      let cornCount = 0;
+      
+      window.addEventListener("keyup", addEvent);
+
+      function addEvent(e){
+        console.log(e.key);
+        keyArray = keyArray.concat(e.key);
+        
+
+        if (keyArray.slice(-6).join("").includes("wesbos")){
+        console.log("DING DING!");
+        cornCount++; cornify_add();
+        console.log("You cornified! ", cornCount, " times");
+        
+      }
+
+      }
+
+      
+      // if the array reads wesbos, print "you cornified" and console log DING DING
+      // if the user types wesbos more than once, print "you cornifie n times"
+      // check the last 6 keys entered for a match to the secret code. 
+
+      
+
+
+
+    </script>
   </body>
 </html>
